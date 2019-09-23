@@ -53,9 +53,9 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
 def train(epoch):
-    print('===========================================')
+    print('=============================================')
     print('Epoch: %d' % epoch)
-    print('===========================================')
+    print('=============================================')
     print('[Train Started]')
     model.train()
     train_loss = 0
@@ -73,8 +73,9 @@ def train(epoch):
         _, predicted = outputs.max(1)
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
-
-        print('[%d] Loss: %.3f | Acc: %.3f%% (%d/%d)' % (batch_idx+1, train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+	
+        if (batch_idx + 1) % 100 ==  0:
+            print('[%d] Loss: %.3f | Acc: %.3f%% (%d/%d)' % (batch_idx+1, train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
 
 def test():
@@ -83,6 +84,7 @@ def test():
     test_loss = 0
     correct = 0
     total = 0
+    best_acc, cur_acc = 0, 0
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(test_loader):
             inputs, targets = inputs.to(device), targets.to(device)
@@ -94,8 +96,11 @@ def test():
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
-            print('Loss: %.3f | Acc: %.3f%% (%d/%d)' % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
-
+            if (batch_idx + 1) % 70 == 0:
+                cur_acc = 100.*correct/total
+                print('Loss: %.3f | Acc: %.3f%% (%d/%d)' % (test_loss/(batch_idx+1), cur_acc, correct, total))
+        best_acc = max(best_acc, cur_acc)
+        print('best_acc: %.3f' % (best_acc))
 
 if __name__ == '__main__':
     for epoch in range(0, 200):
