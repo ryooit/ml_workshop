@@ -10,6 +10,7 @@ from model import ResNet18, ResNet34
 
 # Parse hyperparameters from args
 parser = argparse.ArgumentParser()
+parser.add_argument('--model', type=str, default='resnet18')
 parser.add_argument('--batch_size', type=int, default=128)
 parser.add_argument('--lr', type=float, default=0.001)
 args = parser.parse_args()
@@ -39,8 +40,12 @@ train_loader = torch.utils.data.DataLoader(train_data, batch_size=args.batch_siz
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, shuffle=False, num_workers=2)
 
 # Build a Resnet18 model
-# model = ResNet18()
-model = ResNet34()
+if args.model == 'resnet18':
+    model = ResNet18()
+elif args.model == 'resnet34':
+    model = ResNet34()
+else:
+    raise Exception('Put \'resent18\' or \'resnet34\' for model argument')
 model = model.to(device)
 print(model)
 
