@@ -6,7 +6,7 @@ import argparse
 import torchvision
 import torchvision.transforms as transforms
 
-from model import ResNet18
+from model import ResNet18, ResNet34
 
 # Parse hyperparameters from args
 parser = argparse.ArgumentParser()
@@ -39,7 +39,8 @@ train_loader = torch.utils.data.DataLoader(train_data, batch_size=args.batch_siz
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, shuffle=False, num_workers=2)
 
 # Build a Resnet18 model
-model = ResNet18()
+# model = ResNet18()
+model = ResNet34()
 model = model.to(device)
 print(model)
 

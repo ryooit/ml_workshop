@@ -22,8 +22,7 @@ class Block(nn.Module):
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)))
         out = self.bn2(self.conv2(out))
-        out += self.shortcut(x)
-        out = F.relu(out)
+        out = F.relu(out + self.shortcut(x))
         return out
 
 
@@ -62,3 +61,6 @@ class ResNet(nn.Module):
 
 def ResNet18():
     return ResNet(Block, [2,2,2,2])
+
+def ResNet34():
+    return ResNet(Block, [3,4,6,3])
