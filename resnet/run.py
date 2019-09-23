@@ -78,13 +78,15 @@ def train(epoch):
             print('[%d] Loss: %.3f | Acc: %.3f%% (%d/%d)' % (batch_idx+1, train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
 
+best_acc = 0
 def test():
     print('[Test Started]')
     model.eval()
+    global best_acc
     test_loss = 0
     correct = 0
     total = 0
-    best_acc, cur_acc = 0, 0
+    cur_acc = 0
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(test_loader):
             inputs, targets = inputs.to(device), targets.to(device)
