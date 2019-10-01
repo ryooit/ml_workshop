@@ -1,3 +1,7 @@
 __pycache__/
 data/
 model.pt
+.DS_Store
+.idea/
+.ipynb_checkpoints/
+seq2seq.ipynb
