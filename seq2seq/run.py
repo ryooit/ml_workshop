@@ -67,6 +67,7 @@ print("Unique tokens in source (fr) vocabulary:", len(SRC.vocab))
 print("Unique tokens in target (en) vocabulary:", len(TRG.vocab))
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print("device:", device)
 
 INPUT_DIM = len(SRC.vocab)
 OUTPUT_DIM = len(TRG.vocab)
