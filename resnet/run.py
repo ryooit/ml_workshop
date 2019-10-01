@@ -6,13 +6,14 @@ import argparse
 import torchvision
 import torchvision.transforms as transforms
 
-from resnet.model import resnet18, resnet34, resnet50, resnet101, resnet152
+from model import resnet18, resnet34, resnet50, resnet101, resnet152
 
 # Parse hyperparameters from args
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default='resnet18')
 parser.add_argument('--batch_size', type=int, default=128)
-parser.add_argument('--lr', type=float, default=0.001)
+parser.add_argument('--lr', type=float, default=0.01)
+parser.add_argument('--optimizer', type=str, default='adam')
 args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -44,19 +45,25 @@ if args.model == 'resnet18':
     model = resnet18()
 elif args.model == 'resnet34':
     model = resnet34()
-elif args.mode == 'resnet50':
+elif args.model == 'resnet50':
     model = resnet50()
-elif args.mode == 'resnet101':
+elif args.model == 'resnet101':
     model = resnet101()
-elif args.mode == 'resnet152':
+elif args.model == 'resnet152':
     model = resnet152()
 else:
-    raise Exception('Put \'resent18\' or \'resnet34\' for model argument')
+    raise Exception('Put \'resent18\', \'resnet34\' ,\'resnet50\', \'resnet101\', or \'resnet152\' for model argument')
 model = model.to(device)
 print(model)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=args.lr)
+
+if args.optimizer == 'adam':
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+elif args.optimizer == 'sgd':
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=1e-4, momentum=0.9)
+else:
+    raise Exception('Put \'adam\' or \'sgd\' for optimizer argument')
 
 
 def train(epoch):
